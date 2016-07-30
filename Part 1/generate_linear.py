@@ -8,6 +8,7 @@ STEP = 0.25
 def func(x):
     return 0.2 * x + 3
 
+
 def prediction(theta):
     return theta[0] + theta[1] * x
 
@@ -32,8 +33,14 @@ theta = np.linalg.pinv(A).dot(Y)
 print(theta)
 Y_prediction = A.dot(theta)
 
-error = np.abs(Y_real - Y_prediction)
-print("Error sum:", sum(error))
+error = Y - Y_prediction
+error_squared = error ** 2
+M = sum(error) / len(error)
+M_squared = M ** 2
+D = sum([sq - M for sq in error_squared]) / len(error)
+
+print("M:", M)
+print("D:", D)
 
 plt.plot(X, Y, 'bo')
 plt.plot(X, Y_real, 'g', linewidth=2.0)
