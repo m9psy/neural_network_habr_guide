@@ -37,7 +37,7 @@ error = Y - Y_prediction
 error_squared = error ** 2
 M = sum(error) / len(error)
 M_squared = M ** 2
-D = sum([sq - M for sq in error_squared]) / len(error)
+D = sum([sq - M_squared for sq in error_squared]) / len(error)
 
 print("M:", M)
 print("D:", D)
