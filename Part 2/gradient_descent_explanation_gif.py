@@ -8,10 +8,12 @@ STEP_SIZE = 0.1  # Скорость обучения
 X = [i for i in np.linspace(0, 10, 10000)]
 
 
+# простая парабола
 def func(x):
     return (x - 5) ** 2
 
 
+# плохая негладкая функция с большим количеством локальных минимумов
 def bad_func(x):
     return (x - 5) ** 2 + 50 * np.sin(x) + 50
 
@@ -32,7 +34,10 @@ def draw_gradient_points(num, points, line, cost_caption, step_caption, theta_ca
     if skip_first:
         skip_first = False
         return points, line
+
     current_x = previous_x - STEP_SIZE * func_derivative(previous_x)
+
+    # Точки, линии и прочие рисовалки
     step_caption.set_text("Step: " + str(num))
     cost_caption.set_text("Func value=" + format(func(current_x), ".3f"))
     theta_caption.set_text("$\\theta$=" + format(current_x, ".3f"))
@@ -42,6 +47,7 @@ def draw_gradient_points(num, points, line, cost_caption, step_caption, theta_ca
     # points.set_data([previous_x, current_x], [func(previous_x), func(current_x)])
     line.set_data([previous_x, current_x], [func(previous_x), func(current_x)])
 
+    # Zoom для малых значений функции
     if np.abs(func(previous_x) - func(current_x)) < 0.5:
         ax.axis([4, 6, 0, 1])
 
@@ -63,7 +69,6 @@ ax.set_xlabel("$\\theta$", fontsize=18)
 ax.set_ylabel("$f(\\theta)$", fontsize=18)
 
 ax.plot(X, Y, '-r', linewidth=2.0)
-# ax.plot(X, _dy_dx, '-k')
 ax.axvline(5, color='black', linestyle='--')
 
 start_point, = ax.plot([], 'bo', markersize=10.0)
