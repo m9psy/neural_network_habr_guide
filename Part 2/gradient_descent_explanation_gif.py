@@ -5,24 +5,25 @@ import numpy as np
 
 STEP_COUNT = 25
 STEP_SIZE = 0.1  # Скорость обучения
-X = [i for i in np.linspace(-10, 20, 10000)]
+X = [i for i in np.linspace(0, 10, 10000)]
 
 
 def func(x):
+    return (x - 5) ** 2
+
+
+def bad_func(x):
     return (x - 5) ** 2 + 50 * np.sin(x) + 50
 
 Y = [func(x) for x in X]
 
 
 def func_derivative(x):
+    return 2 * (x - 5)
+
+
+def bad_func_derivative(x):
     return 2 * (x + 25 * np.cos(x) - 5)
-
-_dy_dx = [-func_derivative(x) for x in X]
-
-
-def init_gradient(num, points, line):
-    print(num, points, line)
-    return points, line
 
 # Какая-то жажа и первый кадр пропускается
 skip_first = True
@@ -37,18 +38,18 @@ def draw_gradient_points(num, points, line, cost_caption, step_caption, theta_ca
     theta_caption.set_text("$\\theta$=" + format(current_x, ".3f"))
     print("Step:", num, "Previous:", previous_x, "Current", current_x)
     points[0].set_data(previous_x, func(previous_x))
-    # points[1].set_data(current_x, func(current_x))
+    points[1].set_data(current_x, func(current_x))
     # points.set_data([previous_x, current_x], [func(previous_x), func(current_x)])
     line.set_data([previous_x, current_x], [func(previous_x), func(current_x)])
 
-    # if np.abs(func(previous_x) - func(current_x)) < 0.5:
-    #     ax.axis([4, 6, 0, 1])
-    #
-    # if np.abs(func(previous_x) - func(current_x)) < 0.1:
-    #     ax.axis([4.5, 5.5, 0, 0.5])
-    #
-    # if np.abs(func(previous_x) - func(current_x)) < 0.01:
-    #     ax.axis([4.9, 5.1, 0, 0.08])
+    if np.abs(func(previous_x) - func(current_x)) < 0.5:
+        ax.axis([4, 6, 0, 1])
+
+    if np.abs(func(previous_x) - func(current_x)) < 0.1:
+        ax.axis([4.5, 5.5, 0, 0.5])
+
+    if np.abs(func(previous_x) - func(current_x)) < 0.01:
+        ax.axis([4.9, 5.1, 0, 0.08])
 
     previous_x = current_x
     return points, line
@@ -83,4 +84,4 @@ gradient_anim = anim.FuncAnimation(fig, draw_gradient_points, frames=STEP_COUNT,
 
 # Для того, чтобы получить гифку необходимо установить ImageMagick
 # Можно получить .mp4 файл без всяких magick-shmagick
-gradient_anim.save("images/bad_func_0_1.gif", writer="imagemagick")
+gradient_anim.save("images/animation.gif", writer="imagemagick")
